@@ -1,0 +1,230 @@
+== Physical Plan ==
+AdaptiveSparkPlan (39)
++- InMemoryTableScan (1)
+      +- InMemoryRelation (2)
+            +- AdaptiveSparkPlan (38)
+               +- == Final Plan ==
+                  ResultQueryStage (25)
+                  +- * Sort (24)
+                     +- ShuffleQueryStage (23), Statistics(sizeInBytes=625.7 KiB, rowCount=5.00E+3)
+                        +- Exchange (22)
+                           +- ObjectHashAggregate (21)
+                              +- AQEShuffleRead (20)
+                                 +- ShuffleQueryStage (19), Statistics(sizeInBytes=703.8 KiB, rowCount=5.00E+3)
+                                    +- Exchange (18)
+                                       +- ObjectHashAggregate (17)
+                                          +- * HashAggregate (16)
+                                             +- AQEShuffleRead (15)
+                                                +- ShuffleQueryStage (14), Statistics(sizeInBytes=585.9 KiB, rowCount=1.00E+4)
+                                                   +- Exchange (13)
+                                                      +- * HashAggregate (12)
+                                                         +- * Filter (11)
+                                                            +- * Generate (10)
+                                                               +- * Project (9)
+                                                                  +- * Filter (8)
+                                                                     +- TableCacheQueryStage (7), Statistics(sizeInBytes=215.9 KiB, rowCount=5.00E+3)
+                                                                        +- InMemoryTableScan (3)
+                                                                              +- InMemoryRelation (4)
+                                                                                    +- * Filter (6)
+                                                                                       +- Scan csv  (5)
+               +- == Initial Plan ==
+                  Sort (37)
+                  +- Exchange (36)
+                     +- ObjectHashAggregate (35)
+                        +- Exchange (34)
+                           +- ObjectHashAggregate (33)
+                              +- HashAggregate (32)
+                                 +- Exchange (31)
+                                    +- HashAggregate (30)
+                                       +- Filter (29)
+                                          +- Generate (28)
+                                             +- Project (27)
+                                                +- Filter (26)
+                                                   +- InMemoryTableScan (3)
+                                                         +- InMemoryRelation (4)
+                                                               +- * Filter (6)
+                                                                  +- Scan csv  (5)
+
+
+(1) InMemoryTableScan
+Output [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: [token#120, doc_ids#282, freq#283L]
+
+(2) InMemoryRelation
+Arguments: [token#120, doc_ids#282, freq#283L], StorageLevel(disk, memory, deserialized, 1 replicas), [freq#283L DESC NULLS LAST]
+
+(3) InMemoryTableScan
+Output [2]: [doc_id#0, text#1]
+Arguments: [doc_id#0, text#1], [(size(split(lower(text#1), [\s\W]+, -1), false) > 0), isnotnull(split(lower(text#1), [\s\W]+, -1))]
+
+(4) InMemoryRelation
+Arguments: [doc_id#0, text#1], StorageLevel(disk, memory, deserialized, 1 replicas)
+
+(5) Scan csv 
+Output [2]: [doc_id#0, text#1]
+Batched: false
+Location: InMemoryFileIndex [file:/Users/lorenzo/Documents/Cours/E4FDS2/Data Engineering 2/data/smart_mobility_dataset.csv]
+PushedFilters: [IsNotNull(doc_id), IsNotNull(text)]
+ReadSchema: struct<doc_id:string,text:string>
+
+(6) Filter [codegen id : 1]
+Input [2]: [doc_id#0, text#1]
+Condition : (isnotnull(doc_id#0) AND isnotnull(text#1))
+
+(7) TableCacheQueryStage
+Output [2]: [doc_id#0, text#1]
+Arguments: 0
+
+(8) Filter [codegen id : 1]
+Input [2]: [doc_id#0, text#1]
+Condition : ((size(split(lower(text#1), [\s\W]+, -1), false) > 0) AND isnotnull(split(lower(text#1), [\s\W]+, -1)))
+
+(9) Project [codegen id : 1]
+Output [2]: [doc_id#0, split(lower(text#1), [\s\W]+, -1) AS tokens_raw#118]
+Input [2]: [doc_id#0, text#1]
+
+(10) Generate [codegen id : 1]
+Input [2]: [doc_id#0, tokens_raw#118]
+Arguments: explode(tokens_raw#118), [doc_id#0], false, [token#120]
+
+(11) Filter [codegen id : 1]
+Input [2]: [doc_id#0, token#120]
+Condition : ((NOT (token#120 = ) AND (length(token#120) > 1)) AND NOT token#120 INSET a, about, all, also, an, and, any, are, as, at, be, been, but, by, can, could, did, do, does, don, each, for, from, had, has, have, he, her, his, how, i, if, in, into, is, it, its, ll, may, might, more, no, not, of, on, or, our, out, re, s, shall, she, should, so, t, than, that, the, their, then, there, these, they, this, those, to, up, ve, was, we, were, what, when, where, which, who, whom, why, will, with, would, you)
+
+(12) HashAggregate [codegen id : 1]
+Input [2]: [doc_id#0, token#120]
+Keys [2]: [doc_id#0, token#120]
+Functions: []
+Aggregate Attributes: []
+Results [2]: [doc_id#0, token#120]
+
+(13) Exchange
+Input [2]: [doc_id#0, token#120]
+Arguments: hashpartitioning(doc_id#0, token#120, 200), ENSURE_REQUIREMENTS, [plan_id=475]
+
+(14) ShuffleQueryStage
+Output [2]: [doc_id#0, token#120]
+Arguments: 1
+
+(15) AQEShuffleRead
+Input [2]: [doc_id#0, token#120]
+Arguments: coalesced
+
+(16) HashAggregate [codegen id : 2]
+Input [2]: [doc_id#0, token#120]
+Keys [2]: [doc_id#0, token#120]
+Functions: []
+Aggregate Attributes: []
+Results [2]: [doc_id#0, token#120]
+
+(17) ObjectHashAggregate
+Input [2]: [doc_id#0, token#120]
+Keys [1]: [token#120]
+Functions [2]: [partial_collect_list(doc_id#0, 0, 0), partial_count(doc_id#0)]
+Aggregate Attributes [2]: [buf#318, count#319L]
+Results [3]: [token#120, buf#320, count#321L]
+
+(18) Exchange
+Input [3]: [token#120, buf#320, count#321L]
+Arguments: hashpartitioning(token#120, 200), ENSURE_REQUIREMENTS, [plan_id=528]
+
+(19) ShuffleQueryStage
+Output [3]: [token#120, buf#320, count#321L]
+Arguments: 2
+
+(20) AQEShuffleRead
+Input [3]: [token#120, buf#320, count#321L]
+Arguments: coalesced
+
+(21) ObjectHashAggregate
+Input [3]: [token#120, buf#320, count#321L]
+Keys [1]: [token#120]
+Functions [2]: [collect_list(doc_id#0, 0, 0), count(doc_id#0)]
+Aggregate Attributes [2]: [collect_list(doc_id#0, 0, 0)#286, count(doc_id#0)#287L]
+Results [3]: [token#120, sort_array(collect_list(doc_id#0, 0, 0)#286, true) AS doc_ids#282, count(doc_id#0)#287L AS freq#283L]
+
+(22) Exchange
+Input [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: rangepartitioning(freq#283L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [plan_id=554]
+
+(23) ShuffleQueryStage
+Output [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: 3
+
+(24) Sort [codegen id : 3]
+Input [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: [freq#283L DESC NULLS LAST], true, 0
+
+(25) ResultQueryStage
+Output [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: 4
+
+(26) Filter
+Input [2]: [doc_id#0, text#1]
+Condition : ((size(split(lower(text#1), [\s\W]+, -1), false) > 0) AND isnotnull(split(lower(text#1), [\s\W]+, -1)))
+
+(27) Project
+Output [2]: [doc_id#0, split(lower(text#1), [\s\W]+, -1) AS tokens_raw#118]
+Input [2]: [doc_id#0, text#1]
+
+(28) Generate
+Input [2]: [doc_id#0, tokens_raw#118]
+Arguments: explode(tokens_raw#118), [doc_id#0], false, [token#120]
+
+(29) Filter
+Input [2]: [doc_id#0, token#120]
+Condition : ((NOT (token#120 = ) AND (length(token#120) > 1)) AND NOT token#120 INSET a, about, all, also, an, and, any, are, as, at, be, been, but, by, can, could, did, do, does, don, each, for, from, had, has, have, he, her, his, how, i, if, in, into, is, it, its, ll, may, might, more, no, not, of, on, or, our, out, re, s, shall, she, should, so, t, than, that, the, their, then, there, these, they, this, those, to, up, ve, was, we, were, what, when, where, which, who, whom, why, will, with, would, you)
+
+(30) HashAggregate
+Input [2]: [doc_id#0, token#120]
+Keys [2]: [doc_id#0, token#120]
+Functions: []
+Aggregate Attributes: []
+Results [2]: [doc_id#0, token#120]
+
+(31) Exchange
+Input [2]: [doc_id#0, token#120]
+Arguments: hashpartitioning(doc_id#0, token#120, 200), ENSURE_REQUIREMENTS, [plan_id=351]
+
+(32) HashAggregate
+Input [2]: [doc_id#0, token#120]
+Keys [2]: [doc_id#0, token#120]
+Functions: []
+Aggregate Attributes: []
+Results [2]: [doc_id#0, token#120]
+
+(33) ObjectHashAggregate
+Input [2]: [doc_id#0, token#120]
+Keys [1]: [token#120]
+Functions [2]: [partial_collect_list(doc_id#0, 0, 0), partial_count(doc_id#0)]
+Aggregate Attributes [2]: [buf#318, count#319L]
+Results [3]: [token#120, buf#320, count#321L]
+
+(34) Exchange
+Input [3]: [token#120, buf#320, count#321L]
+Arguments: hashpartitioning(token#120, 200), ENSURE_REQUIREMENTS, [plan_id=355]
+
+(35) ObjectHashAggregate
+Input [3]: [token#120, buf#320, count#321L]
+Keys [1]: [token#120]
+Functions [2]: [collect_list(doc_id#0, 0, 0), count(doc_id#0)]
+Aggregate Attributes [2]: [collect_list(doc_id#0, 0, 0)#286, count(doc_id#0)#287L]
+Results [3]: [token#120, sort_array(collect_list(doc_id#0, 0, 0)#286, true) AS doc_ids#282, count(doc_id#0)#287L AS freq#283L]
+
+(36) Exchange
+Input [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: rangepartitioning(freq#283L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [plan_id=358]
+
+(37) Sort
+Input [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: [freq#283L DESC NULLS LAST], true, 0
+
+(38) AdaptiveSparkPlan
+Output [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: isFinalPlan=true
+
+(39) AdaptiveSparkPlan
+Output [3]: [token#120, doc_ids#282, freq#283L]
+Arguments: isFinalPlan=false
+
+

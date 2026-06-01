@@ -1,0 +1,17 @@
+timestamp,step,metric,value,unit
+2026-05-11T16:37:42,1_ingestion,row_count,5000,documents
+2026-05-11T16:37:42,2_normalization,tokens_before_filter,10000,tokens
+2026-05-11T16:37:42,2_normalization,tokens_after_filter,10000,tokens
+2026-05-11T16:37:42,2_normalization,reduction_pct,0.0,percent
+2026-05-11T16:37:42,3_index_build,unique_terms,5001,terms
+2026-05-11T16:37:42,4_write,parquet_write_s,0.531,seconds
+2026-05-11T16:37:42,4_write,csv_write_s,0.119,seconds
+2026-05-11T16:37:42,6_footprint,parquet_bytes,100706,bytes
+2026-05-11T16:37:42,6_footprint,csv_bytes,288359,bytes
+2026-05-11T16:37:42,6_footprint,csv_parquet_ratio,2.863,x
+2026-05-11T16:37:42,5_query,latency_data_parquet,54.49,ms
+2026-05-11T16:37:42,5_query,latency_data_csv,58.02,ms
+2026-05-11T16:37:42,5_query,latency_network_parquet,28.04,ms
+2026-05-11T16:37:42,5_query,latency_network_csv,34.97,ms
+2026-05-11T16:37:42,5_query,latency_algorithm_parquet,27.0,ms
+2026-05-11T16:37:42,5_query,latency_algorithm_csv,37.4,ms

@@ -1,0 +1,21 @@
+== Physical Plan ==
+* Filter (3)
++- * ColumnarToRow (2)
+   +- Scan parquet  (1)
+
+
+(1) Scan parquet 
+Output [3]: [token#660, doc_ids#661, freq#662L]
+Batched: true
+Location: InMemoryFileIndex [file:/Users/lorenzo/Documents/Cours/E4FDS2/Data Engineering 2/lab2/outputs/lab2/inverted_index]
+PushedFilters: [IsNotNull(token), EqualTo(token,data)]
+ReadSchema: struct<token:string,doc_ids:array<string>,freq:bigint>
+
+(2) ColumnarToRow [codegen id : 1]
+Input [3]: [token#660, doc_ids#661, freq#662L]
+
+(3) Filter [codegen id : 1]
+Input [3]: [token#660, doc_ids#661, freq#662L]
+Condition : (isnotnull(token#660) AND (token#660 = data))
+
+
