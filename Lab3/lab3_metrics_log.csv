@@ -1,0 +1,14 @@
+experiment,algorithm,k,strategy,shuffle_partitions,num_partitions,silhouette,elapsed_s,inertia,shuffle_write_bytes,seed,notes
+k_sweep,KMeans,2,default,4,1,0.1691,3.04,36222.35,,42,
+k_sweep,KMeans,3,default,4,1,0.1433,1.78,34035.19,,42,
+k_sweep,KMeans,4,default,4,1,0.1886,1.49,29590.72,,42,
+k_sweep,KMeans,5,default,4,1,0.155,1.45,30601.43,,42,
+k_sweep,KMeans,6,default,4,1,0.1919,1.48,26520.79,,42,
+algo_compare,BisectingKMeans,6,default,4,1,0.0,3.87,,,42,divisive hierarchy
+partitioning,KMeans,6,A_default,4,1,0.1919,1.28,,18049,42,baseline - no repartition
+partitioning,KMeans,6,B_repartition_8,8,8,0.1912,3.39,,376668,42,repartition(8) + shuffle.partitions=8
+seed_stability,KMeans,6,default,4,1,0.189,,,,0,
+seed_stability,KMeans,6,default,4,1,0.1924,,,,7,
+seed_stability,KMeans,6,default,4,1,0.1914,,,,13,
+seed_stability,KMeans,6,default,4,1,0.1919,,,,42,
+seed_stability,KMeans,6,default,4,1,0.191,,,,99,

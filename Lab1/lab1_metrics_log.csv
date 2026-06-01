@@ -1,0 +1,3 @@
+config,trigger_interval,max_files_per_trigger,shuffle_partitions,batch_id,num_input_rows,input_rows_per_sec,proc_rows_per_sec,trigger_exec_ms,batch_duration_ms
+baseline,10s,2,4,,,,,,
+optimized,5s,4,8,4,0,0.0,0.0,19,
