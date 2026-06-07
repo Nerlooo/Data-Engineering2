@@ -1,0 +1,6 @@
+v1
+{"path":"file:///c:/Users/Enzor/Downloads/outputs/project/silver/pickup_date=2026-01-01/part-00000-904a2703-b39b-42ed-aa10-75251d1836a7.c000.snappy.parquet","timestamp":1780856217575,"batchId":0}
+{"path":"file:///c:/Users/Enzor/Downloads/outputs/project/silver/pickup_date=2026-01-02/part-00001-904a2703-b39b-42ed-aa10-75251d1836a7.c000.snappy.parquet","timestamp":1780856217575,"batchId":0}
+{"path":"file:///c:/Users/Enzor/Downloads/outputs/project/silver/pickup_date=2026-01-03/part-00003-904a2703-b39b-42ed-aa10-75251d1836a7.c000.snappy.parquet","timestamp":1780856217575,"batchId":0}
+{"path":"file:///c:/Users/Enzor/Downloads/outputs/project/silver/pickup_date=2026-01-05/part-00002-904a2703-b39b-42ed-aa10-75251d1836a7.c000.snappy.parquet","timestamp":1780856217575,"batchId":0}
+{"path":"file:///c:/Users/Enzor/Downloads/outputs/project/silver/pickup_date=2026-01-04/part-00000-904a2703-b39b-42ed-aa10-75251d1836a7.c000.snappy.parquet","timestamp":1780856217764,"batchId":0}

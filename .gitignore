@@ -1,1 +1,7 @@
-data
+yellow_tripdata_2026-01.parquet
+part-00000-b2f8fb77-38ab-4a3b-9dba-1f1e42536722-c000.snappy.parquet
+part-00001-b2f8fb77-38ab-4a3b-9dba-1f1e42536722-c000.snappy.parquet
+part-00002-b2f8fb77-38ab-4a3b-9dba-1f1e42536722-c000.snappy.parquet
+part-00003-b2f8fb77-38ab-4a3b-9dba-1f1e42536722-c000.snappy.parquet
+part-00005-e6688654-6f37-4fb5-8803-3d108b440b7d-c000.csv
+part-00000-df885d25-4052-45d4-8431-9d7d60d6901d-c000.snappy.parquet

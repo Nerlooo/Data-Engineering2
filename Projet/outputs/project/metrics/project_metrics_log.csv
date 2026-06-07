@@ -1,0 +1,12 @@
+timestamp,stage,rows,size_gb,partitions,note
+2026-06-07T20:07:44.331933,bronze_ingestion,3724889,0.0642,12,Raw immutable landing - yellow_tripdata_2026-01.parquet
+2026-06-07T20:12:24.914440,bronze_ingestion,3724889,0.0642,12,Raw immutable landing - yellow_tripdata_2026-01.parquet
+2026-06-07T20:12:58.832813,bronze_ingestion,3724889,0.0642,12,Raw immutable landing - yellow_tripdata_2026-01.parquet
+2026-06-07T20:16:43.494238,bronze_ingestion,3724889,0.0642,12,Raw immutable landing - yellow_tripdata_2026-01.parquet
+2026-06-07T20:17:00.445696,silver_etl,2498904,0.0656,4,bronze=3724889 removed=1188698 dupes=37287 ratio=1.022
+2026-06-07T20:17:09.064184,gold_etl,295,0.0,1,"4 analytical tables: hourly, zone, vendor, payment"
+2026-06-07T20:19:12.312529,streaming_ingestion,96449,0.002037,81,window=1h slide=30min watermark=10min elapsed=120.5s slo=EXCEEDED
+2026-06-07T20:19:53.447533,text_processing,2469091,0.080782,4,vocab_size=2469091 avg_query_latency=0.038s parquet_csv_ratio=0.144 num_features=10000
+2026-06-07T20:27:37.425396,clustering,2498904,0.010459,20,best_k=3 algo=KMeans sil_before=0.7161 sil_after=0.7488 slo=MET
+2026-06-07T20:33:45.012801,llm_data_prep,2492606,0.151424,4,total_docs=2498904 pass_rate=99.75% min_len=50 slo=MET
+2026-06-07T20:44:26.385034,llm_data_prep,2497173,0.35046,4,total_input=2498904 pass_rate=99.93% removed_len=0 removed_lang=0 removed_dedup=1731 slo=MET

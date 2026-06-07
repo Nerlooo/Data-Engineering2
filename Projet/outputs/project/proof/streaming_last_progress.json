@@ -1,0 +1,69 @@
+{
+  "id": "8a57c919-9493-41df-bacd-956c0c9868e1",
+  "runId": "a01ba36d-5edf-464b-8e92-26d06e890939",
+  "name": null,
+  "timestamp": "2026-06-07T18:19:00.000Z",
+  "batchId": 4,
+  "batchDuration": 4133,
+  "durationMs": {
+    "addBatch": 3292,
+    "commitOffsets": 299,
+    "getBatch": 9,
+    "latestOffset": 265,
+    "queryPlanning": 8,
+    "triggerExecution": 4133,
+    "walCommit": 258
+  },
+  "eventTime": {
+    "avg": "2026-01-23T08:02:36.702Z",
+    "max": "2026-01-31T23:45:01.000Z",
+    "min": "2026-01-16T23:00:00.000Z",
+    "watermark": "2026-01-30T22:49:59.000Z"
+  },
+  "stateOperators": [
+    {
+      "operatorName": "stateStoreSave",
+      "numRowsTotal": 5818,
+      "numRowsUpdated": 5699,
+      "numRowsRemoved": 6605,
+      "allUpdatesTimeMs": 644,
+      "allRemovalsTimeMs": 57,
+      "commitTimeMs": 26661,
+      "memoryUsedBytes": 3089696,
+      "numRowsDroppedByWatermark": 18598,
+      "numShufflePartitions": 20,
+      "numStateStoreInstances": 20,
+      "customMetrics": {
+        "SnapshotLastUploaded.partition_11_default": -1,
+        "SnapshotLastUploaded.partition_13_default": -1,
+        "SnapshotLastUploaded.partition_14_default": -1,
+        "SnapshotLastUploaded.partition_2_default": -1,
+        "SnapshotLastUploaded.partition_5_default": -1,
+        "loadedMapCacheHitCount": 160,
+        "loadedMapCacheMissCount": 0,
+        "stateOnCurrentVersionSizeBytes": 1451056
+      }
+    }
+  ],
+  "sources": [
+    {
+      "description": "FileStreamSource[file:/c:/Users/Enzor/Downloads/outputs/project/silver]",
+      "startOffset": "{'logOffset': 3}",
+      "endOffset": "{'logOffset': 4}",
+      "latestOffset": "None",
+      "numInputRows": 355685,
+      "inputRowsPerSecond": 11856.2,
+      "processedRowsPerSecond": 86059.8,
+      "metrics": {}
+    }
+  ],
+  "sink": {
+    "description": "FileSink[file:/c:/Users/Enzor/Downloads/outputs/project/streaming/output]",
+    "numOutputRows": -1,
+    "metrics": {}
+  },
+  "numInputRows": 355685,
+  "inputRowsPerSecond": 11856.2,
+  "processedRowsPerSecond": 86059.8,
+  "observedMetrics": {}
+}

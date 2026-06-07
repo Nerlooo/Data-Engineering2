@@ -1,0 +1,55 @@
+# DE2 Project Configuration – NYC Yellow Taxi Pipeline
+
+project:
+  name: "DE2_YellowTaxi_Pipeline"
+  authors: "Rabahi Enzo - Couzinet Lorenzo"
+  dataset: "NYC Yellow Taxi Trip Records – January 2026"
+  platform: "Single machine – PySpark 4.0.1"
+
+paths:
+  raw_data:  "outputs/project/bronze/"
+  silver:    "outputs/project/silver/"
+  gold:      "outputs/project/gold/"
+  streaming: "outputs/project/streaming/"
+  text:      "outputs/project/text/"
+  llm_ready: "outputs/project/llm_ready/"
+  proof:     "outputs/project/proof/"
+
+metrics: "outputs/project/metrics/project_metrics_log.csv"
+
+data:
+  raw_file: "yellow_tripdata_2026-01.parquet"
+  min_rows: 1_000_000
+
+schema:
+  natural_key: ["VendorID", "tpep_pickup_datetime", "PULocationID"]
+
+spark:
+  app_name: "DE2_Project_YellowTaxi"
+  master: "local[*]"
+  driver_memory: "4g"
+  sql_shuffle_partitions: 20
+
+slos:
+  streaming_latency_s: 30
+  text_query_latency_s: 2
+  clustering_silhouette_min: 0.25
+  etl_latency_min: 10
+  parquet_vs_csv_ratio: 0.60
+  llm_quality_pass_rate: 0.80
+
+pipeline_params:
+  streaming:
+    trigger_interval: "30 seconds"
+    watermark_delay: "10 minutes"
+    window_duration: "1 hour"
+    slide_duration: "30 minutes"
+  text:
+    min_token_length: 3
+    max_features: 10000
+  clustering:
+    k_range: [3, 5, 7, 10, 15]
+    max_iter: 20
+    seed: 42
+  llm_prep:
+    min_doc_length: 50

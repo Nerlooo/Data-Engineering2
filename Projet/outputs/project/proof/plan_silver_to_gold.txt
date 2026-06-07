@@ -1,0 +1,34 @@
+ Silver -> Gold (zone_stats) : EXPLAIN extended=True 
+Generated : 2026-06-07T20:17:07.360781
+
+== Parsed Logical Plan ==
+'Sort ['trip_count DESC NULLS LAST], true
++- Aggregate [pickup_month#489, PULocationID#476], [pickup_month#489, PULocationID#476, count(1) AS trip_count#2580L, round(avg(fare_amount#479), 2) AS avg_fare#2581, round(avg(trip_distance#473), 2) AS avg_distance_mi#2582, round(avg(trip_duration_min#490), 2) AS avg_duration_min#2583, round(sum(total_amount#485), 2) AS total_revenue#2584, round(avg(tip_amount#482), 2) AS avg_tip#2585]
+   +- Relation [VendorID#469,tpep_pickup_datetime#470,tpep_dropoff_datetime#471,passenger_count#472,trip_distance#473,RatecodeID#474,store_and_fwd_flag#475,PULocationID#476,DOLocationID#477,payment_type#478,fare_amount#479,extra#480,mta_tax#481,tip_amount#482,tolls_amount#483,improvement_surcharge#484,total_amount#485,congestion_surcharge#486,airport_fee#487,cbd_congestion_fee#488,pickup_month#489,trip_duration_min#490,avg_speed_mph#491,pickup_date#492] parquet
+
+== Analyzed Logical Plan ==
+pickup_month: string, PULocationID: int, trip_count: bigint, avg_fare: double, avg_distance_mi: double, avg_duration_min: double, total_revenue: double, avg_tip: double
+Sort [trip_count#2580L DESC NULLS LAST], true
++- Aggregate [pickup_month#489, PULocationID#476], [pickup_month#489, PULocationID#476, count(1) AS trip_count#2580L, round(avg(fare_amount#479), 2) AS avg_fare#2581, round(avg(trip_distance#473), 2) AS avg_distance_mi#2582, round(avg(trip_duration_min#490), 2) AS avg_duration_min#2583, round(sum(total_amount#485), 2) AS total_revenue#2584, round(avg(tip_amount#482), 2) AS avg_tip#2585]
+   +- Relation [VendorID#469,tpep_pickup_datetime#470,tpep_dropoff_datetime#471,passenger_count#472,trip_distance#473,RatecodeID#474,store_and_fwd_flag#475,PULocationID#476,DOLocationID#477,payment_type#478,fare_amount#479,extra#480,mta_tax#481,tip_amount#482,tolls_amount#483,improvement_surcharge#484,total_amount#485,congestion_surcharge#486,airport_fee#487,cbd_congestion_fee#488,pickup_month#489,trip_duration_min#490,avg_speed_mph#491,pickup_date#492] parquet
+
+== Optimized Logical Plan ==
+Sort [trip_count#2580L DESC NULLS LAST], true
++- Aggregate [pickup_month#489, PULocationID#476], [pickup_month#489, PULocationID#476, count(1) AS trip_count#2580L, round(avg(fare_amount#479), 2) AS avg_fare#2581, round(avg(trip_distance#473), 2) AS avg_distance_mi#2582, round(avg(trip_duration_min#490), 2) AS avg_duration_min#2583, round(sum(total_amount#485), 2) AS total_revenue#2584, round(avg(tip_amount#482), 2) AS avg_tip#2585]
+   +- Project [trip_distance#473, PULocationID#476, fare_amount#479, tip_amount#482, total_amount#485, pickup_month#489, trip_duration_min#490]
+      +- InMemoryRelation [VendorID#469, tpep_pickup_datetime#470, tpep_dropoff_datetime#471, passenger_count#472, trip_distance#473, RatecodeID#474, store_and_fwd_flag#475, PULocationID#476, DOLocationID#477, payment_type#478, fare_amount#479, extra#480, mta_tax#481, tip_amount#482, tolls_amount#483, improvement_surcharge#484, total_amount#485, congestion_surcharge#486, airport_fee#487, cbd_congestion_fee#488, pickup_month#489, trip_duration_min#490, avg_speed_mph#491, pickup_date#492], StorageLevel(disk, memory, deserialized, 1 replicas)
+            +- *(1) ColumnarToRow
+               +- FileScan parquet [VendorID#469,tpep_pickup_datetime#470,tpep_dropoff_datetime#471,passenger_count#472,trip_distance#473,RatecodeID#474,store_and_fwd_flag#475,PULocationID#476,DOLocationID#477,payment_type#478,fare_amount#479,extra#480,mta_tax#481,tip_amount#482,tolls_amount#483,improvement_surcharge#484,total_amount#485,congestion_surcharge#486,airport_fee#487,cbd_congestion_fee#488,pickup_month#489,trip_duration_min#490,avg_speed_mph#491,pickup_date#492] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/c:/Users/Enzor/Downloads/outputs/project/silver], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<VendorID:int,tpep_pickup_datetime:timestamp_ntz,tpep_dropoff_datetime:timestamp_ntz,passen...
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [trip_count#2580L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(trip_count#2580L DESC NULLS LAST, 20), ENSURE_REQUIREMENTS, [plan_id=1684]
+      +- HashAggregate(keys=[pickup_month#489, PULocationID#476], functions=[count(1), avg(fare_amount#479), avg(trip_distance#473), avg(trip_duration_min#490), sum(total_amount#485), avg(tip_amount#482)], output=[pickup_month#489, PULocationID#476, trip_count#2580L, avg_fare#2581, avg_distance_mi#2582, avg_duration_min#2583, total_revenue#2584, avg_tip#2585])
+         +- Exchange hashpartitioning(pickup_month#489, PULocationID#476, 20), ENSURE_REQUIREMENTS, [plan_id=1681]
+            +- HashAggregate(keys=[pickup_month#489, PULocationID#476], functions=[partial_count(1), partial_avg(fare_amount#479), partial_avg(trip_distance#473), partial_avg(trip_duration_min#490), partial_sum(total_amount#485), partial_avg(tip_amount#482)], output=[pickup_month#489, PULocationID#476, count#2994L, sum#2995, count#2996L, sum#2997, count#2998L, sum#2999, count#3000L, sum#3001, sum#3002, count#3003L])
+               +- InMemoryTableScan [trip_distance#473, PULocationID#476, fare_amount#479, tip_amount#482, total_amount#485, pickup_month#489, trip_duration_min#490]
+                     +- InMemoryRelation [VendorID#469, tpep_pickup_datetime#470, tpep_dropoff_datetime#471, passenger_count#472, trip_distance#473, RatecodeID#474, store_and_fwd_flag#475, PULocationID#476, DOLocationID#477, payment_type#478, fare_amount#479, extra#480, mta_tax#481, tip_amount#482, tolls_amount#483, improvement_surcharge#484, total_amount#485, congestion_surcharge#486, airport_fee#487, cbd_congestion_fee#488, pickup_month#489, trip_duration_min#490, avg_speed_mph#491, pickup_date#492], StorageLevel(disk, memory, deserialized, 1 replicas)
+                           +- *(1) ColumnarToRow
+                              +- FileScan parquet [VendorID#469,tpep_pickup_datetime#470,tpep_dropoff_datetime#471,passenger_count#472,trip_distance#473,RatecodeID#474,store_and_fwd_flag#475,PULocationID#476,DOLocationID#477,payment_type#478,fare_amount#479,extra#480,mta_tax#481,tip_amount#482,tolls_amount#483,improvement_surcharge#484,total_amount#485,congestion_surcharge#486,airport_fee#487,cbd_congestion_fee#488,pickup_month#489,trip_duration_min#490,avg_speed_mph#491,pickup_date#492] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/c:/Users/Enzor/Downloads/outputs/project/silver], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<VendorID:int,tpep_pickup_datetime:timestamp_ntz,tpep_dropoff_datetime:timestamp_ntz,passen...
+
